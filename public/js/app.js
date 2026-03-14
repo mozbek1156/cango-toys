@@ -13,7 +13,7 @@ function updateCartBadge() {
   const total = cart.reduce((sum, i) => sum + i.qty, 0);
   document.querySelectorAll('#cartCount').forEach(el => el.textContent = total);
 }
-function addToCart(product, qty = 1) {
+function addToCart(product, qty = 1, btnElement = null) {
   const cart = getCart();
   const existing = cart.find(i => i.id === product.id);
   if (existing) {
@@ -23,6 +23,11 @@ function addToCart(product, qty = 1) {
   }
   saveCart(cart);
   showToast(`"${product.name}" sepete eklendi! 🛒`);
+  
+  if (btnElement) {
+    btnElement.classList.add('bounce-anim');
+    setTimeout(() => btnElement.classList.remove('bounce-anim'), 400);
+  }
 }
 function removeFromCart(id) {
   const cart = getCart().filter(i => i.id !== id);
@@ -60,12 +65,14 @@ function renderProductCard(p) {
   const emoji = getCategoryEmoji(p.categoryInfo);
   const catName = p.categoryInfo ? p.categoryInfo.name : '';
   const wholesale = p.price_wholesale ? `<div class="price-wholesale-label">Toptan:</div><div class="price-wholesale">₺${p.price_wholesale.toFixed(2)}</div>` : '';
+  const ageTag = p.ageGroup ? `<span style="position:absolute; top:12px; left:12px; background:var(--brand-peach); color:white; font-size:0.75rem; font-weight:800; padding:0.25rem 0.6rem; border-radius:50px; z-index:2;">👶 ${p.ageGroup} Yaş</span>` : '';
+  
   return `
     <div class="product-card" onclick="window.location='/product.html?id=${p.id}'" style="cursor:pointer">
       <div class="product-card-img">
         ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"/>` : emoji}
-        ${p.featured ? '<span class="product-badge-featured">⭐ Öne Çıkan</span>' : ''}
-        <span class="product-badge-wholesale">TOPTAN ₺${p.price_wholesale ? p.price_wholesale.toFixed(0) : ''}</span>
+        ${p.featured ? '<span class="product-badge-featured" style="z-index:2;">⭐ Öne Çıkan</span>' : ''}
+        ${ageTag}
       </div>
       <div class="product-card-body">
         <span class="product-cat-tag">${catName}</span>
@@ -76,7 +83,7 @@ function renderProductCard(p) {
         </div>
         <div class="product-card-footer" style="display:flex;justify-content:space-between;align-items:center">
           ${getStockBadge(p.stock)}
-          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();quickAdd(${JSON.stringify(p).replace(/"/g,'&quot;')})" ${p.stock===0?'disabled':''}>
+          <button class="btn btn-primary btn-sm btn-add" onclick="event.stopPropagation();quickAdd(${JSON.stringify(p).replace(/"/g,'&quot;')}, this)" ${p.stock===0?'disabled':''}>
             Sepete Ekle
           </button>
         </div>
@@ -84,8 +91,8 @@ function renderProductCard(p) {
     </div>`;
 }
 
-function quickAdd(product) {
-  addToCart(product, 1);
+function quickAdd(product, btn) {
+  addToCart(product, 1, btn);
 }
 
 // --- Toast ---
