@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cango-toys
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    branch: main
