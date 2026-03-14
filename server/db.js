@@ -116,7 +116,7 @@ const defaultDB = {
   orders: [],
   admin: {
     username: "admin",
-    password: "$2a$10$XtBqxwu4Q3Z.9W3fHgfI2.KlMHW9lVv0WUgTu0p6.UxvJb9D1q6Xi",
+    password: "$2b$10$ntVVRfEuKf9/qSRv3bph7O8/0OxgwrfJEqNoeIQ4q11yYpM0kjoha",
     name: "Cango Admin"
   },
   settings: {
