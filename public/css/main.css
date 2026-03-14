@@ -41,6 +41,7 @@ body {
   color: var(--gray-800);
   min-height: 100vh;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 img { max-width: 100%; height: auto; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -590,23 +591,39 @@ h4 { font-size: 1.2rem; }
   .filter-panel { position: static; }
 }
 @media (max-width: 768px) {
-  .hero-content { grid-template-columns: 1fr; text-align: center; padding: 3rem 1.5rem; gap: 2rem; }
+  body { overflow-x: hidden; }
+  .hero { min-height: auto; padding: 2rem 0 3rem; }
+  .hero-content { 
+    display: flex; flex-direction: column; text-align: center; 
+    padding: 1rem 1.5rem; gap: 2rem; 
+  }
+  .hero-content > div:first-child {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .hero h1 { font-size: 2.2rem; margin: 1rem 0; }
+  .hero-badge { margin-bottom: 0.5rem; }
+  .hero-desc { margin: 0 auto 1.5rem auto; max-width: 100%; }
+  
+  .hero-actions { justify-content: center; width: 100%; gap: 1rem; flex-direction: column; }
+  .hero-actions .btn { width: 100%; max-width: 320px; }
+  .hero-stats { justify-content: center; flex-wrap: wrap; gap: 1.5rem; margin-top: 2rem; }
+  
   .hero-visual { 
-    order: 2; width: 100%; margin-top: 1rem;
-    align-items: center !important; 
+    width: 100%; margin-top: 1rem;
+    flex-direction: column !important; align-items: center !important; 
   }
-  .hero-scroller-title { justify-content: center; width: 100%; }
+  .hero-scroller-title { justify-content: center; width: 100%; margin-bottom: 0.5rem; }
   .hero-sidebar-scroller {
-    width: 100%; height: auto;
+    width: 100vw; height: auto; margin-left: -1.5rem; padding: 1rem 1.5rem;
     flex-direction: row; overflow-x: auto; overflow-y: hidden;
-    padding: 1rem; padding-bottom: 1.5rem;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    background: transparent; border: none; box-shadow: none; border-radius: 0;
   }
+  .hero-sidebar-scroller::-webkit-scrollbar { display: none; }
   .hero-scroll-item {
-    flex-shrink: 0; width: 260px; scroll-snap-align: start;
+    flex-shrink: 0; width: 240px; scroll-snap-align: center;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
   }
-  .hero-actions { justify-content: center; }
-  .hero-stats { justify-content: center; }
   .navbar-nav { display: none; flex-direction: column; gap: 0.3rem; position: absolute; top: 100%; left: 0; right: 0; background: var(--navy-mid); padding: 1rem; }
   .navbar-nav.open { display: flex; }
   .hamburger { display: flex; }
