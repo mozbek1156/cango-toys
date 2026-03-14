@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Siparişler – Cango Toys Admin</title>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+  <aside class="admin-sidebar">
+    <div class="admin-logo"><div class="admin-logo-text">Cango<span>Toys</span></div><div class="admin-logo-sub">Admin Paneli</div></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-label">Yönetim</div>
+      <a href="/admin/dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span> Dashboard</a>
+      <a href="/admin/products.html" class="sidebar-link"><span class="sidebar-icon">📦</span> Ürünler</a>
+      <a href="/admin/categories.html" class="sidebar-link"><span class="sidebar-icon">🗂️</span> Kategoriler</a>
+      <a href="/admin/orders.html" class="sidebar-link active"><span class="sidebar-icon">🛒</span> Siparişler</a>
+      <a href="/" class="sidebar-link" target="_blank"><span class="sidebar-icon">🏪</span> Mağazaya Git</a>
+    </nav>
+    <div class="sidebar-footer"><div class="admin-user"><div class="admin-avatar">👤</div><div><div style="font-size:0.88rem;font-weight:700;color:white">Cango Admin</div></div><button onclick="logout()" style="margin-left:auto;background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:1.1rem">🚪</button></div></div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <div class="admin-page-title">🛒 Sipariş Yönetimi</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <select class="btn btn-ghost btn-sm" id="statusFilter" onchange="filterOrders()">
+          <option value="">Tüm Durumlar</option>
+          <option value="pending">⏳ Bekliyor</option>
+          <option value="processing">🔄 İşleniyor</option>
+          <option value="completed">✅ Tamamlandı</option>
+          <option value="cancelled">❌ İptal</option>
+        </select>
+        <select class="btn btn-ghost btn-sm" id="typeFilter" onchange="filterOrders()">
+          <option value="">Her İki Tür</option>
+          <option value="retail">🛍️ Perakende</option>
+          <option value="wholesale">📦 Toptan</option>
+        </select>
+        <div id="ordCount" style="font-size:0.85rem;color:var(--gray-400);align-self:center"></div>
+      </div>
+    </header>
+    <div class="admin-content">
+      <div class="admin-card">
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead><tr><th>Kod</th><th>Müşteri</th><th>Telefon</th><th>Tür</th><th>Tutar</th><th>Durum</th><th>Tarih</th><th>İşlem</th></tr></thead>
+            <tbody id="orderBody"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Yükleniyor…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal" style="max-width:600px">
+      <div class="modal-header">
+        <div class="modal-title">📋 Sipariş Detayı – <span id="detailCode" style="color:var(--brand-blue)"></span></div>
+        <button class="modal-close" onclick="closeModal('orderModal')">✕</button>
+      </div>
+      <div id="detailContent"></div>
+      <div style="margin-top:1.5rem">
+        <div style="font-weight:700;margin-bottom:0.5rem">Durum Güncelle:</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="changeStatus('pending')">⏳ Bekliyor</button>
+          <button class="btn btn-ghost btn-sm" onclick="changeStatus('processing')" style="color:var(--navy)">🔄 İşleniyor</button>
+          <button class="btn btn-green btn-sm" onclick="changeStatus('completed')">✅ Tamamlandı</button>
+          <button class="btn btn-brand-purple btn-sm" onclick="changeStatus('cancelled')">❌ İptal Et</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/admin.js"></script>
+  <script>
+    let allOrders = [], selectedOrderId = null;
+
+    function statusBadge(s) {
+      const map = { pending:['badge-brand-green','⏳ Bekliyor'], processing:['badge-blue','🔄 İşleniyor'], completed:['badge-green','✅ Tamamlandı'], cancelled:['badge-brand-purple','❌ İptal'] };
+      const [cls, label] = map[s] || ['badge-gray', s];
+      return `<span class="badge ${cls}">${label}</span>`;
+    }
+    function typeBadge(t) { return t==='wholesale'?'<span class="badge badge-blue">📦 Toptan</span>':'<span class="badge badge-gray">🛍️ Perakende</span>'; }
+
+    async function load() {
+      if (!await checkAuth()) return;
+      allOrders = await fetch('/api/orders', { headers: authHeaders() }).then(r=>r.json());
+      renderTable(allOrders);
+    }
+
+    function renderTable(orders) {
+      document.getElementById('ordCount').textContent = `${orders.length} sipariş`;
+      const body = document.getElementById('orderBody');
+      if (!orders.length) { body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--gray-400)">Sipariş bulunamadı</td></tr>'; return; }
+      body.innerHTML = orders.map(o => `<tr>
+        <td><strong style="color:var(--brand-blue)">${o.code}</strong></td>
+        <td><strong>${o.customer.name}</strong><br><span style="font-size:0.78rem;color:var(--gray-400)">${o.customer.email||''}</span></td>
+        <td style="font-size:0.88rem">${o.customer.phone}</td>
+        <td>${typeBadge(o.type)}</td>
+        <td style="font-weight:800">₺${o.totalPrice.toFixed(2)}</td>
+        <td>${statusBadge(o.status)}</td>
+        <td style="font-size:0.8rem;color:var(--gray-400)">${new Date(o.createdAt).toLocaleDateString('tr-TR')}<br>${new Date(o.createdAt).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="viewOrder('${o.id}')">👁 Detay</button></td>
+      </tr>`).join('');
+    }
+
+    function filterOrders() {
+      const status = document.getElementById('statusFilter').value;
+      const type = document.getElementById('typeFilter').value;
+      let res = allOrders;
+      if (status) res = res.filter(o => o.status === status);
+      if (type) res = res.filter(o => o.type === type);
+      renderTable(res);
+    }
+
+    function viewOrder(id) {
+      selectedOrderId = id;
+      const o = allOrders.find(x => x.id === id);
+      document.getElementById('detailCode').textContent = o.code;
+      document.getElementById('detailContent').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+          <div><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">Müşteri</div><div style="font-weight:700">${o.customer.name}</div></div>
+          <div><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">Telefon</div><div>${o.customer.phone}</div></div>
+          <div><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">E-posta</div><div>${o.customer.email||'–'}</div></div>
+          <div><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">Tür</div><div>${typeBadge(o.type)}</div></div>
+          <div style="grid-column:1/-1"><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">Adres</div><div>${o.customer.address}</div></div>
+          ${o.notes ? `<div style="grid-column:1/-1"><div style="font-size:0.78rem;color:var(--gray-400);font-weight:700;text-transform:uppercase">Not</div><div>${o.notes}</div></div>` : ''}
+        </div>
+        <div style="background:var(--gray-50);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem">
+          <div style="font-weight:800;margin-bottom:0.8rem">🛒 Ürünler</div>
+          ${o.items.map(i=>`<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px dashed var(--gray-200)"><span>${i.name} x${i.qty}</span><span style="font-weight:700">₺${i.subtotal.toFixed(2)}</span></div>`).join('')}
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0 0;font-size:1.1rem;font-weight:900;color:var(--brand-blue)"><span>TOPLAM</span><span>₺${o.totalPrice.toFixed(2)}</span></div>
+        </div>
+        <div>Durum: ${statusBadge(o.status)}</div>
+      `;
+      openModal('orderModal');
+    }
+
+    async function changeStatus(status) {
+      if (!selectedOrderId) return;
+      const res = await fetch(`/api/orders/${selectedOrderId}/status`, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status }) });
+      if (res.ok) {
+        const idx = allOrders.findIndex(o => o.id === selectedOrderId);
+        if (idx !== -1) allOrders[idx].status = status;
+        closeModal('orderModal');
+        showToast('Sipariş durumu güncellendi ✅');
+        renderTable(allOrders);
+        filterOrders();
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

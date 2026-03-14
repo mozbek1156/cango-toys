@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ürün Detayı – Cango Toys</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand"><div class="navbar-logo">Cango<span>Toys</span></div></a>
+      <ul class="navbar-nav" id="navMenu">
+        <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="/products.html" class="nav-link active">Ürünler</a></li>
+        <li><a href="/about.html" class="nav-link">Hakkımızda</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <button class="btn-cart" onclick="window.location='/cart.html'">🛒 Sepet <span class="cart-badge" id="cartCount">0</span></button>
+        <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="pageContent">
+    <div class="section text-center">
+      <div class="empty-state-icon">⏳</div>
+      <p>Yükleniyor…</p>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/app.js"></script>
+  <script>
+    let product = null;
+    let qty = 1;
+    let priceModeLocal = getCartType();
+
+    async function loadProduct() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) { window.location = '/products.html'; return; }
+      const res = await fetch(`/api/products/${id}`);
+      if (!res.ok) { window.location = '/products.html'; return; }
+      product = await res.json();
+      renderProduct();
+      updateCartBadge();
+    }
+
+    function displayPrice() {
+      return priceModeLocal === 'wholesale' ? product.price_wholesale : product.price_retail;
+    }
+
+    function renderProduct() {
+      const emoji = getCategoryEmoji(product.categoryInfo);
+      const catName = product.categoryInfo?.name || '';
+      const inStock = product.stock > 0;
+      document.title = `${product.name} – Cango Toys`;
+      document.getElementById('pageContent').innerHTML = `
+        <div class="page-header">
+          <div class="container">
+            <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="breadcrumb-sep">/</span><a href="/products.html">Ürünler</a><span class="breadcrumb-sep">/</span><span>${product.name}</span></div>
+          </div>
+        </div>
+        <section class="section">
+          <div class="container">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start" class="product-detail-grid">
+              <!-- IMAGE -->
+              <div style="background:linear-gradient(135deg,var(--brand-green-light) 0%,#FFE4CC 100%);border-radius:var(--radius-xl);height:420px;display:flex;align-items:center;justify-content:center;font-size:9rem;position:relative;box-shadow:var(--shadow-md)">
+                ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-xl)"/>` : emoji}
+                ${product.featured ? '<span class="product-badge-featured" style="top:20px;right:20px">⭐ Öne Çıkan</span>' : ''}
+              </div>
+              <!-- INFO -->
+              <div>
+                <span class="product-cat-tag" style="font-size:0.85rem">${catName}</span>
+                <h1 style="font-size:2rem;margin-bottom:1rem;color:var(--navy)">${product.name}</h1>
+                <div style="margin-bottom:1.5rem">${getStockBadge(product.stock)}</div>
+                
+                <!-- PRICE MODE TOGGLE -->
+                <div style="margin-bottom:1rem">
+                  <div style="font-size:0.85rem;color:var(--gray-600);margin-bottom:0.6rem;font-weight:700">Fiyat Türü:</div>
+                  <div class="pricing-toggle">
+                    <button class="toggle-btn ${priceModeLocal==='retail'?'active':''}" id="btnRetail" onclick="changeMode('retail')">Perakende</button>
+                    <button class="toggle-btn wholesale ${priceModeLocal==='wholesale'?'active':''}" id="btnWholesale" onclick="changeMode('wholesale')">Toptan</button>
+                  </div>
+                </div>
+
+                <div style="margin-bottom:1.5rem">
+                  <div id="priceDisplay" style="font-family:var(--font-heading);font-size:2.5rem;font-weight:900;color:var(--navy)">₺${displayPrice().toFixed(2)}</div>
+                  ${priceModeLocal==='retail' ? `<div style="color:var(--green);font-size:0.9rem;font-weight:700;margin-top:0.3rem">Toptan fiyat: ₺${product.price_wholesale.toFixed(2)} <span style="color:var(--gray-400);font-weight:400">(min ₺500 sepet)</span></div>` : `<div style="color:var(--green);font-size:0.9rem;font-weight:700;margin-top:0.3rem">%20 toptan indirimi uygulandı!</div>`}
+                </div>
+
+                <!-- QTY + ADD -->
+                <div style="display:flex;gap:1rem;align-items:center;margin-bottom:2rem;flex-wrap:wrap">
+                  <div class="qty-control" style="background:var(--gray-100);border-radius:var(--radius-md);padding:0.3rem 0.5rem">
+                    <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                    <span class="qty-val" id="qtyDisplay">${qty}</span>
+                    <button class="qty-btn" onclick="changeQty(1)">+</button>
+                  </div>
+                  <button class="btn btn-primary btn-lg" onclick="doAdd()" ${!inStock?'disabled':''}>
+                    🛒 Sepete Ekle
+                  </button>
+                </div>
+
+                <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:1.2rem">
+                  <div style="font-weight:800;margin-bottom:0.6rem">📋 Ürün Açıklaması</div>
+                  <p style="color:var(--gray-600);line-height:1.7">${product.description || 'Açıklama bulunmuyor.'}</p>
+                  ${product.tags?.length ? `<div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">${product.tags.map(t=>`<span style="background:var(--brand-green-light);color:var(--navy);font-size:0.78rem;font-weight:700;padding:0.2rem 0.7rem;border-radius:50px">#${t}</span>`).join('')}</div>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+      // Responsive grid
+      const style = document.createElement('style');
+      style.textContent = `@media(max-width:768px){.product-detail-grid{grid-template-columns:1fr!important}}`;
+      document.head.appendChild(style);
+    }
+
+    function changeMode(mode) {
+      priceModeLocal = mode;
+      setCartType(mode);
+      document.getElementById('btnRetail').classList.toggle('active', mode==='retail');
+      document.getElementById('btnWholesale').classList.toggle('active', mode==='wholesale');
+      document.getElementById('priceDisplay').textContent = '₺' + displayPrice().toFixed(2);
+    }
+
+    function changeQty(delta) {
+      qty = Math.max(1, Math.min(qty + delta, product.stock || 99));
+      document.getElementById('qtyDisplay').textContent = qty;
+    }
+
+    function doAdd() {
+      addToCart(product, qty);
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>

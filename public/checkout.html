@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sipariş Oluştur – Cango Toys</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand"><div class="navbar-logo">Cango<span>Toys</span></div></a>
+      <div class="navbar-actions">
+        <button class="btn-cart" onclick="window.location='/cart.html'">🛒 Sepet <span class="cart-badge" id="cartCount">0</span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>📝 Sipariş Bilgileri</h1>
+      <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="breadcrumb-sep">/</span><a href="/cart.html">Sepet</a><span class="breadcrumb-sep">/</span><span>Sipariş</span></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start" id="checkoutLayout">
+        <!-- FORM -->
+        <div class="order-info-card">
+          <h3 style="margin-bottom:1.5rem">👤 Müşteri Bilgileri</h3>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Ad Soyad *</label>
+              <input class="form-control" id="custName" placeholder="Ahmet Yılmaz" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefon *</label>
+              <input class="form-control" id="custPhone" type="tel" placeholder="0532 000 00 00" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">E-posta</label>
+            <input class="form-control" id="custEmail" type="email" placeholder="ornek@email.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teslimat Adresi *</label>
+            <textarea class="form-control" id="custAddress" rows="3" placeholder="Tam teslimat adresi giriniz…" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sipariş Notu</label>
+            <textarea class="form-control" id="custNotes" rows="2" placeholder="Varsa özel not…"></textarea>
+          </div>
+
+          <h3 style="margin:1.5rem 0 1rem">💳 Alışveriş Türü</h3>
+          <div class="pricing-toggle" style="margin-bottom:1rem">
+            <button class="toggle-btn" id="btnRet" onclick="setMode('retail')">🛍️ Perakende</button>
+            <button class="toggle-btn wholesale" id="btnWho" onclick="setMode('wholesale')">📦 Toptan</button>
+          </div>
+          <div id="modeNote" style="font-size:0.85rem;color:var(--gray-600);margin-bottom:1.5rem"></div>
+
+          <div id="errorMsg" style="background: rgba(156,39,176,0.1);color:var(--brand-purple);padding:1rem;border-radius:var(--radius-sm);margin-bottom:1rem;display:none;font-weight:600"></div>
+          <button class="btn btn-primary btn-lg btn-full" id="submitBtn" onclick="submitOrder()">
+            ✅ Siparişi Onayla
+          </button>
+          <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:0.8rem">Siparişiniz onaylandıktan sonra sizinle iletişime geçilecektir.</p>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="order-info-card" style="position:sticky;top:80px">
+          <h3 style="margin-bottom:1.2rem">🛒 Sipariş Özeti</h3>
+          <div id="orderSummaryItems"></div>
+          <div class="order-summary-row"><span style="color:var(--gray-600)">Ara Toplam</span><span id="subTotal">₺0.00</span></div>
+          <div class="order-summary-row"><span style="color:var(--gray-600)">Kargo</span><span style="color:var(--green)">Ücretsiz</span></div>
+          <div class="order-total-row"><span>TOPLAM</span><span id="totalAmt" style="color:var(--brand-blue)">₺0.00</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/app.js"></script>
+  <script>
+    let mode = getCartType();
+    const cart = getCart();
+
+    if (!cart.length) window.location = '/cart.html';
+
+    const s = document.createElement('style');
+    s.textContent = `@media(max-width:768px){#checkoutLayout{grid-template-columns:1fr!important}}`;
+    document.head.appendChild(s);
+
+    function setMode(m) {
+      mode = m;
+      setCartType(m);
+      document.getElementById('btnRet').classList.toggle('active', m==='retail');
+      document.getElementById('btnWho').classList.toggle('active', m==='wholesale');
+      const note = document.getElementById('modeNote');
+      note.textContent = m==='wholesale' ? '📦 Toptan: Minimum ₺500 sepet tutarında %20 indirim uygulanır.' : '🛍️ Perakende: Normal fiyatlar geçerlidir.';
+      renderSummary();
+    }
+
+    function renderSummary() {
+      let total = 0;
+      const itemsEl = document.getElementById('orderSummaryItems');
+      itemsEl.innerHTML = cart.map(i => {
+        const price = mode==='wholesale' ? i.price_wholesale : i.price_retail;
+        total += price * i.qty;
+        return `<div class="order-summary-row"><span style="font-size:0.9rem">${i.name} x${i.qty}</span><span>₺${(price*i.qty).toFixed(2)}</span></div>`;
+      }).join('');
+      document.getElementById('subTotal').textContent = `₺${total.toFixed(2)}`;
+      document.getElementById('totalAmt').textContent = `₺${total.toFixed(2)}`;
+    }
+
+    async function submitOrder() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const notes = document.getElementById('custNotes').value.trim();
+      const errEl = document.getElementById('errorMsg');
+
+      if (!name || !phone || !address) {
+        errEl.textContent = '⚠️ Ad soyad, telefon ve adres zorunludur.';
+        errEl.style.display = 'block'; return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = '⏳ Gönderiliyor…';
+
+      const items = cart.map(i => ({ productId: i.id, qty: i.qty }));
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customer: { name, phone, email, address }, items, type: mode, notes })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errEl.textContent = '❌ ' + data.message;
+          errEl.style.display = 'block';
+          btn.disabled = false; btn.textContent = '✅ Siparişi Onayla'; return;
+        }
+        clearCart();
+        localStorage.setItem('lastOrder', JSON.stringify(data.order));
+        window.location = '/order-success.html';
+      } catch {
+        errEl.textContent = '❌ Sunucu hatası, lütfen tekrar deneyin.';
+        errEl.style.display = 'block';
+        btn.disabled = false; btn.textContent = '✅ Siparişi Onayla';
+      }
+    }
+
+    setMode(mode);
+    updateCartBadge();
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Giriş – Cango Toys</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+  <style>
+    body { background: linear-gradient(135deg, #1A1A2E 0%, #0F3460 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-card { background: white; border-radius: 28px; padding: 3rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div style="font-family:'Poppins',sans-serif;font-size:2rem;font-weight:900;color:#1A1A2E">Cango<span style="color: var(--brand-blue)">Toys</span></div>
+      <div style="color:#9E9E9E;font-size:0.85rem;margin-top:0.3rem">🔒 Admin Paneli</div>
+    </div>
+    <div id="errorBox" style="background: rgba(156,39,176,0.1);color:#C62828;padding:0.8rem 1rem;border-radius:12px;margin-bottom:1rem;font-weight:600;display:none"></div>
+    <div class="form-group">
+      <label class="form-label">Kullanıcı Adı</label>
+      <input class="form-control" id="username" value="admin" placeholder="admin"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Şifre</label>
+      <input class="form-control" id="password" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn btn-primary btn-full" style="margin-top:0.5rem;padding:0.9rem" id="loginBtn" onclick="doLogin()">Giriş Yap</button>
+    <div style="text-align:center;margin-top:1.5rem;font-size:0.8rem;color:#9E9E9E">
+      <a href="/" style="color: var(--brand-blue)">← Mağazaya dön</a>
+    </div>
+  </div>
+  <script>
+    async function doLogin() {
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('errorBox');
+      err.style.display = 'none';
+      btn.disabled = true; btn.textContent = '⏳ Giriş yapılıyor…';
+      const res = await fetch('/api/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: document.getElementById('username').value, password: document.getElementById('password').value })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('adminToken', data.token);
+        window.location = '/admin/dashboard.html';
+      } else {
+        err.textContent = data.message; err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Giriş Yap';
+      }
+    }
+  </script>
+</body>
+</html>

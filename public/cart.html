@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sepetim – Cango Toys</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand"><div class="navbar-logo">Cango<span>Toys</span></div></a>
+      <ul class="navbar-nav" id="navMenu">
+        <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="/products.html" class="nav-link">Ürünler</a></li>
+        <li><a href="/about.html" class="nav-link">Hakkımızda</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <button class="btn-cart" onclick="window.location='/cart.html'">🛒 Sepet <span class="cart-badge" id="cartCount">0</span></button>
+        <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>🛒 Sepetim</h1>
+      <div class="breadcrumb"><a href="/">Ana Sayfa</a><span class="breadcrumb-sep">/</span><span>Sepet</span></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <!-- PRICE TYPE TOGGLE -->
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <span style="font-weight:700;color:var(--gray-600)">Alışveriş Türü:</span>
+        <div class="pricing-toggle">
+          <button class="toggle-btn" id="btnRetail" onclick="setMode('retail')">🛍️ Perakende</button>
+          <button class="toggle-btn wholesale" id="btnWholesale" onclick="setMode('wholesale')">📦 Toptan</button>
+        </div>
+        <div id="wholesaleNote" style="font-size:0.82rem;color:var(--gray-400);display:none">Toptan için min ₺500 sepet tutarı gereklidir</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start" id="cartLayout">
+        <!-- CART ITEMS -->
+        <div id="cartItems">
+          <div class="text-center" style="padding:3rem;color:var(--gray-400)">⏳ Yükleniyor…</div>
+        </div>
+        <!-- ORDER SUMMARY -->
+        <div class="order-info-card" id="summaryBox" style="position:sticky;top:80px">
+          <h3 style="margin-bottom:1.2rem">📋 Sipariş Özeti</h3>
+          <div id="summaryItems"></div>
+          <div class="order-summary-row"><span style="color:var(--gray-600)">Ara Toplam</span><span id="subtotalVal">₺0.00</span></div>
+          <div class="order-summary-row"><span style="color:var(--gray-600)">Kargo</span><span style="color:var(--green)">Ücretsiz 🎉</span></div>
+          <div class="order-total-row"><span>TOPLAM</span><span id="totalVal" style="color:var(--brand-blue)">₺0.00</span></div>
+          <div id="wholesaleWarning" style="background:var(--brand-green-light);border-radius:var(--radius-sm);padding:0.8rem;margin:1rem 0;font-size:0.82rem;display:none">
+            ⚠️ Toptan için <strong>₺500 minimum</strong> gerekli
+          </div>
+          <button class="btn btn-primary btn-full btn-lg mt-3" id="checkoutBtn" onclick="goCheckout()">Siparişi Tamamla →</button>
+          <a href="/products.html" class="btn btn-ghost btn-full mt-2">Alışverişe Devam Et</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/app.js"></script>
+  <script>
+    let mode = getCartType();
+
+    function setMode(m) {
+      mode = m;
+      setCartType(m);
+      document.getElementById('btnRetail').classList.toggle('active', m==='retail');
+      document.getElementById('btnWholesale').classList.toggle('active', m==='wholesale');
+      document.getElementById('wholesaleNote').style.display = m==='wholesale' ? 'block' : 'none';
+      render();
+    }
+
+    function updateQty(id, delta) {
+      const cart = getCart();
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      saveCart(cart);
+      render();
+    }
+    function removeItem(id) {
+      removeFromCart(id);
+      render();
+    }
+
+    function render() {
+      const cart = getCart();
+      const items = document.getElementById('cartItems');
+      const summaryItems = document.getElementById('summaryItems');
+      updateCartBadge();
+
+      if (!cart.length) {
+        items.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🛒</div>
+            <h3>Sepetiniz boş</h3>
+            <p style="margin-bottom:1.5rem">Harika ürünleri keşfetmeye başlayın!</p>
+            <a href="/products.html" class="btn btn-primary">Ürünlere Git</a>
+          </div>`;
+        document.getElementById('summaryItems').innerHTML = '';
+        document.getElementById('subtotalVal').textContent = '₺0.00';
+        document.getElementById('totalVal').textContent = '₺0.00';
+        document.getElementById('checkoutBtn').disabled = true;
+        return;
+      }
+
+      let total = 0;
+      items.innerHTML = cart.map(item => {
+        const price = mode === 'wholesale' ? item.price_wholesale : item.price_retail;
+        const subtotal = price * item.qty;
+        total += subtotal;
+        return `
+          <div class="cart-item">
+            <div class="cart-item-img">${item.emoji || '🎁'}</div>
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">₺${price.toFixed(2)} / adet</div>
+              ${mode==='wholesale'?'<span style="font-size:0.75rem;color:var(--green);font-weight:700">Toptan Fiyat</span>':''}
+            </div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty('${item.id}',-1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty('${item.id}',1)">+</button>
+            </div>
+            <div style="font-weight:800;min-width:80px;text-align:right;color:var(--navy)">₺${subtotal.toFixed(2)}</div>
+            <button onclick="removeItem('${item.id}')" style="background:none;border:none;font-size:1.3rem;color:var(--gray-400);cursor:pointer;transition:var(--transition)" onmouseover="this.style.color='var(--brand-purple)'" onmouseout="this.style.color='var(--gray-400)'">🗑️</button>
+          </div>`;
+      }).join('');
+
+      summaryItems.innerHTML = cart.map(i => {
+        const p = mode==='wholesale'?i.price_wholesale:i.price_retail;
+        return `<div class="order-summary-row"><span>${i.name} x${i.qty}</span><span>₺${(p*i.qty).toFixed(2)}</span></div>`;
+      }).join('');
+
+      document.getElementById('subtotalVal').textContent = `₺${total.toFixed(2)}`;
+      document.getElementById('totalVal').textContent = `₺${total.toFixed(2)}`;
+      document.getElementById('checkoutBtn').disabled = false;
+
+      const warnEl = document.getElementById('wholesaleWarning');
+      if (mode === 'wholesale' && total < 500) {
+        warnEl.style.display = 'block';
+        warnEl.innerHTML = `⚠️ Toptan için <strong>₺500 minimum</strong> gerekli. Eksik: <strong>₺${(500-total).toFixed(2)}</strong>`;
+        document.getElementById('checkoutBtn').disabled = true;
+      } else {
+        warnEl.style.display = 'none';
+        document.getElementById('checkoutBtn').disabled = false;
+      }
+    }
+
+    function goCheckout() {
+      window.location = '/checkout.html';
+    }
+
+    // Responsive cart layout
+    const s = document.createElement('style');
+    s.textContent = `@media(max-width:768px){#cartLayout{grid-template-columns:1fr!important}#summaryBox{position:static!important}}`;
+    document.head.appendChild(s);
+
+    setMode(mode);
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hakkımızda – Cango Toys</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand"><div class="navbar-logo">Cango<span>Toys</span></div></a>
+      <ul class="navbar-nav" id="navMenu">
+        <li><a href="/" class="nav-link">Ana Sayfa</a></li>
+        <li><a href="/products.html" class="nav-link">Ürünler</a></li>
+        <li><a href="/about.html" class="nav-link active">Hakkımızda</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <button class="btn-cart" onclick="window.location='/cart.html'">🛒 <span class="cart-badge" id="cartCount">0</span></button>
+        <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>🏪 Hakkımızda</h1>
+      <p>Oyunun ve mutluluğun adresi</p>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center" class="about-grid">
+        <div style="background:linear-gradient(135deg,var(--brand-green-light),#FFE4CC);border-radius:var(--radius-xl);height:380px;display:flex;align-items:center;justify-content:center">
+          <div style="font-size:8rem">🧸</div>
+        </div>
+        <div>
+          <div class="section-tag">Hikayemiz</div>
+          <h2 class="section-title" style="text-align:left">Oyunun Kalbi Burada Atar!</h2>
+          <p style="color:var(--gray-600);margin-bottom:1rem;line-height:1.8">Cango Toys, çocukların gülümsemeleri için 2020 yılında kuruldu. "Oyun, çocuğun dilidir." ilkesiyle hareket eden mağazamız, binlerce ürünüyle her yaştan çocuğa hitap ediyor.</p>
+          <p style="color:var(--gray-600);margin-bottom:1.5rem;line-height:1.8">Güvenli, eğitici ve eğlenceli oyuncaklar sunarken hem perakende müşterilere hem de bayilere, okullara ve kurumlara toptan satış imkânı sunuyoruz.</p>
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+            <div style="text-align:center"><div style="font-size:2rem;font-weight:900;color:var(--brand-blue);font-family:var(--font-heading)">500+</div><div style="font-size:0.85rem;color:var(--gray-400)">Ürün</div></div>
+            <div style="text-align:center"><div style="font-size:2rem;font-weight:900;color:var(--brand-blue);font-family:var(--font-heading)">8</div><div style="font-size:0.85rem;color:var(--gray-400)">Kategori</div></div>
+            <div style="text-align:center"><div style="font-size:2rem;font-weight:900;color:var(--brand-blue);font-family:var(--font-heading)">5⭐</div><div style="font-size:0.85rem;color:var(--gray-400)">Müşteri Memnuniyeti</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">💡 Değerlerimiz</div>
+        <h2 class="section-title">Neden Cango Toys?</h2>
+      </div>
+      <div class="grid-3" style="gap:1.5rem">
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">🔒</div>
+          <h4 style="margin-bottom:0.5rem">Güvenli Ürünler</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">Tüm ürünlerimiz CE belgeli ve çocuk güvenliği standartlarına uygundur.</p>
+        </div>
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">💰</div>
+          <h4 style="margin-bottom:0.5rem">Rekabetçi Fiyat</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">Hem perakende hem toptan fiyatlarımızla her bütçeye uygun seçenekler.</p>
+        </div>
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">🚀</div>
+          <h4 style="margin-bottom:0.5rem">Hızlı Teslimat</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">İstanbul ve çevresinde aynı gün, Türkiye genelinde 2-3 iş günü teslimat.</p>
+        </div>
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">📦</div>
+          <h4 style="margin-bottom:0.5rem">Toptan Satış</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">Okullar, kurumlar ve bayiler için %20 toptan indirim. Min. ₺500.</p>
+        </div>
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">♻️</div>
+          <h4 style="margin-bottom:0.5rem">Çevre Dostu</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">Geri dönüştürülebilir ambalaj ve sürdürülebilir tedarik zinciri.</p>
+        </div>
+        <div class="order-info-card text-center">
+          <div style="font-size:3.5rem;margin-bottom:1rem">💬</div>
+          <h4 style="margin-bottom:0.5rem">7/24 Destek</h4>
+          <p style="color:var(--gray-600);font-size:0.9rem">Sorularınız için WhatsApp, telefon ve e-posta ile her zaman yanınızdayız.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container" style="max-width:700px">
+      <div class="section-header">
+        <div class="section-tag">📞 İletişim</div>
+        <h2 class="section-title">Bize Ulaşın</h2>
+      </div>
+      <div class="order-info-card">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem" class="contact-grid">
+          <div>
+            <div style="display:flex;flex-direction:column;gap:1rem">
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.5rem">📞</span><div><div style="font-weight:700">Telefon</div><div style="color:var(--gray-600)">+90 212 000 00 00</div></div></div>
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.5rem">✉️</span><div><div style="font-weight:700">E-posta</div><div style="color:var(--gray-600)">info@cangotoys.com</div></div></div>
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.5rem">📍</span><div><div style="font-weight:700">Adres</div><div style="color:var(--gray-600)">Örnek Mah. Oyuncak Cad. No:1, İstanbul</div></div></div>
+              <div style="display:flex;align-items:center;gap:0.8rem"><span style="font-size:1.5rem">🕐</span><div><div style="font-weight:700">Çalışma Saatleri</div><div style="color:var(--gray-600)">Hafta içi 09:00–18:00</div></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="form-group"><label class="form-label">Adınız</label><input class="form-control" placeholder="Adınız Soyadınız"/></div>
+            <div class="form-group"><label class="form-label">E-posta</label><input class="form-control" type="email" placeholder="email@ornek.com"/></div>
+            <div class="form-group"><label class="form-label">Mesajınız</label><textarea class="form-control" rows="3" placeholder="Nasıl yardımcı olabiliriz?"></textarea></div>
+            <button class="btn btn-primary btn-full" onclick="alert('Mesajınız alındı! En kısa sürede dönüş yapacağız. 😊')">Gönder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0">
+        <a href="/" class="footer-brand-name" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:900;color:var(--brand-green)">Cango<span style="color:var(--brand-blue)">Toys</span></a>
+        <div class="footer-bottom-text">© 2025 Cango Toys – Oyunun Kalbi Burada Atar!</div>
+      </div>
+    </div>
+  </footer>
+  <style>@media(max-width:768px){.about-grid,.contact-grid{grid-template-columns:1fr!important}.grid-3{grid-template-columns:1fr!important}}</style>
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/app.js"></script>
+  <script>updateCartBadge();</script>
+</body>
+</html>
