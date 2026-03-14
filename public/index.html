@@ -8,29 +8,76 @@
   <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="navbar-inner">
-      <a href="/" class="navbar-brand">
-        <div class="navbar-logo">Cango<span>Toys</span></div>
-      </a>
-      <ul class="navbar-nav" id="navMenu">
-        <li><a href="/" class="nav-link active">Ana Sayfa</a></li>
-        <li><a href="/products.html" class="nav-link">Ürünler</a></li>
-        <li><a href="/products.html?cat=kutu-oyunlari" class="nav-link">Kutu Oyunları</a></li>
-        <li><a href="/about.html" class="nav-link">Hakkımızda</a></li>
-        <li><a href="/admin/login.html" class="nav-link btn-outline-white" style="padding: 0.3rem 0.8rem; border-radius: 5px; margin-left:10px;">👤 Giriş Yap</a></li>
-      </ul>
-      <div class="navbar-actions">
-        <button class="btn-cart" onclick="window.location='/cart.html'" id="cartBtn">
-          🛒 Sepet <span class="cart-badge" id="cartCount">0</span>
-        </button>
-        <button class="hamburger" id="hamburger" onclick="toggleNav()">
+  <!-- MOBILE SIDEBAR -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <aside class="mobile-sidebar" id="mobileSidebar">
+    <div class="mobile-sidebar-header">
+      <div class="header-brand-logo">Cango<span>Toys</span></div>
+      <button class="sidebar-close-btn" onclick="toggleSidebar()">✕</button>
+    </div>
+    <div class="mobile-nav-links">
+      <div style="margin-bottom:1rem">
+        <div style="font-size:0.75rem;font-weight:800;color:var(--gray-400);text-transform:uppercase;margin-bottom:0.5rem">Arama</div>
+        <div style="display:flex;background:var(--gray-50);border-radius:var(--radius-sm);border:2px solid var(--gray-200);overflow:hidden">
+          <input type="text" placeholder="Ürün ara..." style="flex:1;border:none;padding:0.6rem;background:transparent;outline:none;font-size:0.9rem"/>
+          <button style="background:var(--brand-blue);color:white;border:none;padding:0 0.8rem">🔍</button>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;font-weight:800;color:var(--gray-400);text-transform:uppercase;margin-bottom:0.3rem">Menü</div>
+      <a href="/" class="mobile-nav-item active">🏡 Ana Sayfa</a>
+      <a href="/products.html" class="mobile-nav-item">🛍️ Tüm Ürünler</a>
+      <a href="/products.html?cat=kutu-oyunlari" class="mobile-nav-item">🎲 Kutu Oyunları</a>
+      <a href="/about.html" class="mobile-nav-item">ℹ️ Hakkımızda</a>
+    </div>
+    <div class="mobile-sidebar-footer">
+      <a href="/admin/login.html" class="btn btn-outline" style="width:100%;justify-content:center">👤 Giriş Yap</a>
+    </div>
+  </aside>
+
+  <!-- ADVANCED DESKTOP HEADER -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button class="hamburger" onclick="toggleSidebar()">
           <span></span><span></span><span></span>
+        </button>
+        <a href="/" class="header-brand-logo">Cango<span>Toys</span></a>
+      </div>
+
+      <div class="header-search-wrapper">
+        <select class="header-category-select" id="headerCategory">
+          <option value="">Tüm Kategoriler</option>
+          <option value="oyuncaklar">Oyuncaklar</option>
+          <option value="kirtasiye">Kırtasiye</option>
+          <option value="kutu-oyunlari">Kutu Oyunları</option>
+          <option value="peluslar">Peluşlar</option>
+        </select>
+        <input type="text" class="header-search-input" id="headerSearch" placeholder="Binlerce ürün içinde arama yapın..."/>
+        <button class="header-search-btn" onclick="doSearch()">🔍</button>
+      </div>
+
+      <div class="header-actions">
+        <a href="/admin/login.html" class="header-action-btn">
+          <span class="header-action-icon">👤</span> <span>Giriş Yap</span>
+        </a>
+        <button class="header-action-btn" onclick="window.location='/cart.html'">
+          <span class="header-action-icon">🛒</span> <span>Sepetim</span>
+          <div class="cart-badge" id="cartCount" style="position:absolute;top:-8px;right:-8px">0</div>
         </button>
       </div>
     </div>
-  </nav>
+  </header>
+
+  <!-- SUB-HEADER FOR DESKTOP LINKS -->
+  <div class="sub-header">
+    <nav class="sub-header-nav">
+      <a href="/" class="sub-header-link active">Ana Sayfa</a>
+      <a href="/products.html" class="sub-header-link">Tüm Ürünler</a>
+      <a href="/products.html?cat=kutu-oyunlari" class="sub-header-link">Kutu Oyunları</a>
+      <a href="/products.html?type=wholesale" class="sub-header-link" style="color:var(--brand-blue)">📦 Toptan Satış</a>
+      <a href="/about.html" class="sub-header-link">Hakkımızda</a>
+    </nav>
+  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -179,8 +226,18 @@
 
   <script src="/js/app.js"></script>
   <script>
-    function toggleNav() {
-      document.getElementById('navMenu').classList.toggle('open');
+    function toggleSidebar() {
+      document.getElementById('mobileSidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('open');
+    }
+
+    function doSearch() {
+      const q = document.getElementById('headerSearch').value;
+      const cat = document.getElementById('headerCategory').value;
+      let url = '/products.html?';
+      if (q) url += 'search=' + encodeURIComponent(q) + '&';
+      if (cat) url += 'cat=' + encodeURIComponent(cat);
+      window.location = url;
     }
 
     async function loadCategories() {
