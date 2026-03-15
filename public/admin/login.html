@@ -6,17 +6,17 @@
   <title>Admin Giriş – Cango Toys</title>
   <link rel="stylesheet" href="/css/main.css"/>
   <style>
-    body { background: linear-gradient(135deg, #1A1A2E 0%, #0F3460 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    body { background: linear-gradient(135deg, #334155 0%, #475569 50%, #1E293B 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; }
     .login-card { background: white; border-radius: 28px; padding: 3rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
   </style>
 </head>
 <body>
   <div class="login-card">
     <div style="text-align:center;margin-bottom:2rem">
-      <div style="font-family:'Poppins',sans-serif;font-size:2rem;font-weight:900;color:#1A1A2E">Cango<span style="color: var(--brand-blue)">Toys</span></div>
-      <div style="color:#9E9E9E;font-size:0.85rem;margin-top:0.3rem">🔒 Admin Paneli</div>
+      <div style="font-family:'Poppins',sans-serif;font-size:2rem;font-weight:900;color:#A78BFA">Cango<span style="color:#334155">Toys</span></div>
+      <div style="color:#94A3B8;font-size:0.85rem;margin-top:0.3rem">🔒 Admin Paneli</div>
     </div>
-    <div id="errorBox" style="background: rgba(156,39,176,0.1);color:#C62828;padding:0.8rem 1rem;border-radius:12px;margin-bottom:1rem;font-weight:600;display:none"></div>
+    <div id="errorBox" style="background: rgba(167,139,250,0.1);color:#C62828;padding:0.8rem 1rem;border-radius:12px;margin-bottom:1rem;font-weight:600;display:none"></div>
     <div class="form-group">
       <label class="form-label">Kullanıcı Adı</label>
       <input class="form-control" id="username" value="admin" placeholder="admin"/>
@@ -25,9 +25,9 @@
       <label class="form-label">Şifre</label>
       <input class="form-control" id="password" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="btn btn-primary btn-full" style="margin-top:0.5rem;padding:0.9rem" id="loginBtn" onclick="doLogin()">Giriş Yap</button>
-    <div style="text-align:center;margin-top:1.5rem;font-size:0.8rem;color:#9E9E9E">
-      <a href="/" style="color: var(--brand-blue)">← Mağazaya dön</a>
+    <button class="btn btn-full" style="margin-top:0.5rem;padding:0.9rem;background:#A78BFA;color:white;border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;" id="loginBtn" onclick="doLogin()">Giriş Yap</button>
+    <div style="text-align:center;margin-top:1.5rem;font-size:0.8rem;color:#94A3B8">
+      <a href="/" style="color: #A78BFA">← Mağazaya dön</a>
     </div>
   </div>
   <script>

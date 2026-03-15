@@ -1,27 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700;800;900&display=swap');
 
 :root {
-  --brand-green: #4CAF50; --brand-blue: #0288D1; --navy: #4E342E;
-  --navy-mid: #5D4037; --navy-light: #795548;
-  --white: #FFFFFF; --gray-50: #FDF8F5; --gray-100: #F3E5F5;
-  --gray-200: #E0E0E0; --gray-400: #9E9E9E; --gray-600: #616161; --gray-800: #212121;
-  --green: #4CAF50; --brand-purple: #00838F; --orange: #0288D1;
-  --sidebar-w: 250px;
-  --font-main: 'Nunito', sans-serif; --font-heading: 'Poppins', sans-serif;
+  --brand-purple: #A78BFA;
+  --brand-mint: #6EE7B7;
+  --brand-peach: #FDBA74;
+  --navy: #334155; /* Yazı ve koyu alan rengi (koyu gri) */
+  --white: #FFFFFF;
+  --gray-50: #F1F5F9; /* Açık gri arkaplan */
+  --gray-100: #E2E8F0;
+  --gray-200: #CBD5E1;
+  --gray-400: #94A3B8;
+  --gray-600: #64748B;
+  --gray-800: #334155;
+  --green: #6EE7B7; /* Statüs vb. için mint */
+  --brand-blue: #A78BFA; /* Ana butonlarda pastel mor kullanımı için yönlendirme */
+  --sidebar-w: 260px;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
   --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px; --radius-xl: 28px;
   --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-main); background: var(--gray-50); color: var(--gray-800); display: flex; min-height: 100vh; }
 
+/* TOP NAVBAR */
+.top-navbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 70px; background: white;
+  border-bottom: 1px solid var(--gray-200); z-index: 101;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem;
+}
+.top-nav-left { display: flex; align-items: center; gap: 2rem; }
+.top-nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.top-logo { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 900; color: var(--brand-purple); text-decoration: none; }
+.top-logo span { color: var(--navy); }
+.nav-icon-btn { position: relative; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--gray-600); transition: var(--transition); }
+.nav-icon-btn:hover { color: var(--brand-purple); }
+.nav-badge { position: absolute; top: -5px; right: -5px; background: var(--brand-peach); color: white; font-size: 0.65rem; font-weight: 800; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+
 /* SIDEBAR */
 .admin-sidebar {
   width: var(--sidebar-w); background: var(--navy); color: white;
-  position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+  position: fixed; top: 70px; left: 0; bottom: 0; z-index: 100;
   overflow-y: auto; transition: var(--transition);
 }
-.admin-logo {
-  padding: 1.8rem 1.5rem 1rem;
+.admin-logo { /* Eski kullanım artık gerek kalmayabilir ancak saklıyorum */
+  padding: 1.5rem 1.5rem 1rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .admin-logo-text {
@@ -41,20 +64,19 @@ body { font-family: var(--font-main); background: var(--gray-50); color: var(--g
   transition: var(--transition); cursor: pointer; border: none; background: none;
   width: 100%; text-align: left; text-decoration: none;
 }
-.sidebar-link:hover { color: var(--brand-green); background: rgba(76, 175, 80, 0.08); }
-.sidebar-link.active { color: var(--brand-green); background: rgba(76, 175, 80, 0.12); border-left: 3px solid var(--brand-green); }
+.sidebar-link:hover { color: var(--brand-purple); background: rgba(167, 139, 250, 0.08); }
+.sidebar-link.active { color: var(--brand-purple); background: rgba(167, 139, 250, 0.12); border-left: 3px solid var(--brand-purple); }
 .sidebar-icon { width: 20px; font-size: 1rem; }
 .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto; }
 .admin-user { display: flex; align-items: center; gap: 0.7rem; }
 .admin-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--brand-blue); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
 /* MAIN */
-.admin-main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+.admin-main { margin-left: var(--sidebar-w); padding-top: 70px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
 .admin-header {
-  background: white; border-bottom: 1px solid var(--gray-200);
-  padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: transparent;
+  padding: 1.5rem 2rem 0.5rem; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 70px; z-index: 50;
 }
 .admin-page-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--navy); }
 .admin-content { padding: 2rem; flex: 1; }
@@ -68,9 +90,9 @@ body { font-family: var(--font-main); background: var(--gray-50); color: var(--g
 }
 .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
 .stat-icon { width: 54px; height: 54px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
-.stat-icon-green { background: #E8F5E9; }
-.stat-icon-blue { background: #E1F5FE; }
-.stat-icon-teal { background: #E0F2F1; }
+.stat-icon-purple { background: #F3E8FF; color: var(--brand-purple); }
+.stat-icon-mint { background: #D1FAE5; color: #10B981; }
+.stat-icon-peach { background: #FFEDD5; color: #F97316; }
 .stat-num { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--navy); line-height: 1; }
 .stat-label { font-size: 0.82rem; color: var(--gray-400); font-weight: 600; margin-top: 0.2rem; }
 
@@ -97,12 +119,12 @@ textarea.form-control { resize: vertical; }
 
 /* BUTTONS */
 .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.3rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.88rem; border: 2px solid transparent; transition: var(--transition); cursor: pointer; font-family: var(--font-main); }
-.btn-primary { background: var(--brand-blue); color: white; border-color: var(--brand-blue); }
-.btn-primary:hover { background: #01579B; transform: translateY(-1px); }
-.btn-secondary { background: var(--brand-green); color: var(--navy); border-color: var(--brand-green); }
-.btn-secondary:hover { background: #388E3C; transform: translateY(-1px); }
-.btn-green { background: var(--green); color: white; border-color: var(--green); }
-.btn-green:hover { background: #388E3C; }
+.btn-primary { background: var(--brand-purple); color: white; border-color: var(--brand-purple); }
+.btn-primary:hover { background: #8B5CF6; transform: translateY(-1px); }
+.btn-secondary { background: var(--brand-mint); color: var(--navy); border-color: var(--brand-mint); }
+.btn-secondary:hover { background: #34D399; transform: translateY(-1px); }
+.btn-green { background: var(--brand-mint); color: var(--navy); border-color: var(--brand-mint); }
+.btn-green:hover { background: #34D399; }
 .btn-brand-purple { background: var(--brand-purple); color: white; border-color: var(--brand-purple); }
 .btn-brand-purple:hover { background: #006064; }
 .btn-ghost { background: var(--gray-100); color: var(--gray-800); border-color: var(--gray-200); }
@@ -112,11 +134,12 @@ textarea.form-control { resize: vertical; }
 
 /* STATUS BADGES */
 .badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 50px; }
-.badge-brand-green { background: #E8F5E9; color: #388E3C; }
-.badge-blue { background: #E1F5FE; color: #0288D1; }
-.badge-green { background: #E8F5E9; color: #2E7D32; }
-.badge-brand-purple { background: rgba(0, 131, 143, 0.1); color: #006064; }
+.badge-brand-green { background: #D1FAE5; color: #10B981; }
+.badge-blue { background: #E0F2FE; color: #0284C7; }
+.badge-green { background: #D1FAE5; color: #10B981; }
+.badge-brand-purple { background: #F3E8FF; color: #7E22CE; }
 .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+.badge-peach { background: #FFEDD5; color: #EA580C; }
 
 /* MODAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9998; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }

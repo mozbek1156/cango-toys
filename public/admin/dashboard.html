@@ -8,43 +8,108 @@
 </head>
 <body>
   <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-  <aside class="admin-sidebar">
-    <div class="admin-logo">
-      <div class="admin-logo-text">Cango<span>Toys</span></div>
-      <div class="admin-logo-sub">Admin Paneli</div>
+
+  <!-- TOP NAVBAR -->
+  <nav class="top-navbar">
+    <div class="top-nav-left">
+      <a href="/admin/dashboard.html" class="top-logo">Cango<span>Toys</span></a>
+      <div class="admin-search" style="min-width:280px;">
+        <span>🔍</span>
+        <input type="text" placeholder="Ürün, sipariş veya müşteri ara…" style="flex:1;"/>
+      </div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-label">Yönetim</div>
+    <div class="top-nav-right">
+      <button class="nav-icon-btn" title="Bildirimler">🔔<span class="nav-badge">3</span></button>
+      <button class="nav-icon-btn" title="Mesajlar">💬</button>
+      <div style="display:flex;align-items:center;gap:0.6rem;cursor:pointer;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-purple);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:0.9rem;">CA</div>
+        <div style="line-height:1.2;">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--navy);">Cango Admin</div>
+          <div style="font-size:0.72rem;color:var(--gray-400);">Yönetici</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <nav class="sidebar-nav" style="padding-top:1.5rem;">
+      <div class="sidebar-label">Ana Menü</div>
       <a href="/admin/dashboard.html" class="sidebar-link active"><span class="sidebar-icon">📊</span> Dashboard</a>
       <a href="/admin/products.html" class="sidebar-link"><span class="sidebar-icon">📦</span> Ürünler</a>
-      <a href="/admin/categories.html" class="sidebar-link"><span class="sidebar-icon">🗂️</span> Kategoriler</a>
+      <a href="/admin/categories.html" class="sidebar-link"><span class="sidebar-icon">🧸</span> Kategoriler</a>
       <a href="/admin/orders.html" class="sidebar-link"><span class="sidebar-icon">🛒</span> Siparişler</a>
-      <div class="sidebar-label" style="margin-top:1rem">Mağaza</div>
+      <a href="/admin/customers.html" class="sidebar-link"><span class="sidebar-icon">👥</span> Müşteriler</a>
+
+      <div class="sidebar-label" style="margin-top:1.2rem">İçerik & Pazarlama</div>
+      <a href="/admin/reviews.html" class="sidebar-link"><span class="sidebar-icon">⭐</span> Yorumlar</a>
+      <a href="/admin/campaigns.html" class="sidebar-link"><span class="sidebar-icon">🎁</span> Kampanyalar</a>
+
+      <div class="sidebar-label" style="margin-top:1.2rem">Analiz</div>
+      <a href="/admin/reports.html" class="sidebar-link"><span class="sidebar-icon">📊</span> Raporlar</a>
+      <a href="/admin/settings.html" class="sidebar-link"><span class="sidebar-icon">⚙️</span> Ayarlar</a>
+
+      <div class="sidebar-label" style="margin-top:1.2rem">Mağaza</div>
       <a href="/" class="sidebar-link" target="_blank"><span class="sidebar-icon">🏪</span> Mağazaya Git</a>
     </nav>
     <div class="sidebar-footer">
       <div class="admin-user">
-        <div class="admin-avatar">👤</div>
-        <div><div style="font-size:0.88rem;font-weight:700;color:white">Cango Admin</div><div style="font-size:0.75rem;color:var(--gray-400)">admin</div></div>
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--brand-purple);display:flex;align-items:center;justify-content:center;color:white;font-size:0.8rem;font-weight:800;">CA</div>
+        <div><div style="font-size:0.85rem;font-weight:700;color:white">Cango Admin</div><div style="font-size:0.72rem;color:var(--gray-400)">admin</div></div>
         <button onclick="logout()" style="margin-left:auto;background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:1.1rem" title="Çıkış">🚪</button>
       </div>
     </div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="admin-main">
     <header class="admin-header">
-      <div class="admin-page-title">📊 Dashboard</div>
-      <div style="font-size:0.85rem;color:var(--gray-400)" id="timeDisplay"></div>
+      <div>
+        <div class="admin-page-title">📊 Dashboard</div>
+        <div style="font-size:0.82rem;color:var(--gray-400);margin-top:0.2rem;" id="timeDisplay"></div>
+      </div>
+      <div style="display:flex;gap:0.7rem;">
+        <button class="btn btn-primary btn-sm">+ Hızlı Ürün Ekle</button>
+        <button class="btn btn-ghost btn-sm">📥 Excel Yükle</button>
+      </div>
     </header>
     <div class="admin-content">
-      <!-- STAT CARDS -->
+
+      <!-- STAT CARDS – Pastel Renkler -->
       <div class="stat-grid" id="statGrid">
-        <div class="stat-card"><div class="stat-icon stat-icon-green">🛒</div><div><div class="stat-num" id="s-total">–</div><div class="stat-label">Toplam Sipariş</div></div></div>
-        <div class="stat-card"><div class="stat-icon stat-icon-blue">⏳</div><div><div class="stat-num" id="s-pending">–</div><div class="stat-label">Bekleyen</div></div></div>
-        <div class="stat-card"><div class="stat-icon stat-icon-green">✅</div><div><div class="stat-num" id="s-completed">–</div><div class="stat-label">Tamamlanan</div></div></div>
-        <div class="stat-card"><div class="stat-icon stat-icon-blue">💰</div><div><div class="stat-num" id="s-revenue">–</div><div class="stat-label">Toplam Gelir</div></div></div>
-        <div class="stat-card"><div class="stat-icon stat-icon-green">📦</div><div><div class="stat-num" id="s-products">–</div><div class="stat-label">Toplam Ürün</div></div></div>
-        <div class="stat-card"><div class="stat-icon stat-icon-teal">⚠️</div><div><div class="stat-num" id="s-lowstock">–</div><div class="stat-label">Düşük Stok</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-purple">🛒</div><div><div class="stat-num" id="s-today-orders">–</div><div class="stat-label">Bugünkü Siparişler</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-mint">💰</div><div><div class="stat-num" id="s-revenue">–</div><div class="stat-label">Toplam Satış</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-peach">🏆</div><div><div class="stat-num" id="s-bestseller">–</div><div class="stat-label">En Çok Satan Oyuncak</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-purple">👥</div><div><div class="stat-num" id="s-new-customers">–</div><div class="stat-label">Yeni Müşteriler</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-mint">📦</div><div><div class="stat-num" id="s-products">–</div><div class="stat-label">Toplam Ürün</div></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-peach">⚠️</div><div><div class="stat-num" id="s-lowstock">–</div><div class="stat-label">Düşük Stok</div></div></div>
+      </div>
+
+      <!-- CHARTS PLACEHOLDER -->
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📈 Aylık Satış Grafiği</div>
+            <select class="form-control" style="width:auto;max-width:140px;font-size:0.8rem;padding:0.3rem 0.5rem;">
+              <option>Bu Yıl</option><option>Geçen Yıl</option>
+            </select>
+          </div>
+          <div style="padding:2rem;text-align:center;color:var(--gray-400);">
+            <div style="font-size:3rem;margin-bottom:1rem;">📊</div>
+            <div style="font-size:0.9rem;font-weight:600;">Grafik verisi yükleniyor…</div>
+            <div style="font-size:0.8rem;margin-top:0.5rem;">Chart.js veya benzeri kütüphane entegre edildiğinde burada aylık satış grafiği gösterilecektir.</div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="admin-card-title">🧩 En Çok Satan Kategoriler</div>
+          </div>
+          <div style="padding:2rem;text-align:center;color:var(--gray-400);">
+            <div style="font-size:3rem;margin-bottom:1rem;">🎯</div>
+            <div style="font-size:0.9rem;font-weight:600;">Kategori dağılımı yükleniyor…</div>
+            <div style="font-size:0.8rem;margin-top:0.5rem;">Pasta grafik ile en çok satan kategoriler burada gösterilecektir.</div>
+          </div>
+        </div>
       </div>
 
       <!-- RECENT ORDERS -->
@@ -88,10 +153,10 @@
       <div style="margin-top:1.5rem">
         <div style="font-weight:700;margin-bottom:0.5rem">Durum Güncelle:</div>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <button class="btn btn-ghost btn-sm" onclick="changeStatus('pending')">⏳ Bekliyor</button>
-          <button class="btn btn-ghost btn-sm" onclick="changeStatus('processing')" style="color:var(--navy)">🔄 İşleniyor</button>
-          <button class="btn btn-green btn-sm" onclick="changeStatus('completed')">✅ Tamamlandı</button>
-          <button class="btn btn-brand-purple btn-sm" onclick="changeStatus('cancelled')">❌ İptal Et</button>
+          <button class="btn btn-ghost btn-sm" onclick="changeStatus('preparing')" style="border-color:#FDBA74;color:#EA580C">🟡 Hazırlanıyor</button>
+          <button class="btn btn-ghost btn-sm" onclick="changeStatus('shipped')" style="border-color:#93C5FD;color:#2563EB">🟢 Kargoya Verildi</button>
+          <button class="btn btn-green btn-sm" onclick="changeStatus('delivered')">🟢 Teslim Edildi</button>
+          <button class="btn btn-brand-purple btn-sm" onclick="changeStatus('returned')">🔴 İade</button>
         </div>
       </div>
     </div>
@@ -109,10 +174,10 @@
       if (!await checkAuth()) return;
       // Stats
       const stats = await fetch('/api/orders/stats/summary', { headers: authHeaders() }).then(r=>r.json());
-      document.getElementById('s-total').textContent = stats.total;
-      document.getElementById('s-pending').textContent = stats.pending;
-      document.getElementById('s-completed').textContent = stats.completed;
-      document.getElementById('s-revenue').textContent = '₺' + Number(stats.revenue).toFixed(0);
+      document.getElementById('s-today-orders').textContent = stats.total || 0;
+      document.getElementById('s-revenue').textContent = '₺' + Number(stats.revenue || 0).toFixed(0);
+      document.getElementById('s-bestseller').textContent = stats.bestseller || '–';
+      document.getElementById('s-new-customers').textContent = stats.newCustomers || 0;
       document.getElementById('s-products').textContent = stats.productCount;
       document.getElementById('s-lowstock').textContent = stats.lowStock;
 
@@ -144,7 +209,16 @@
     }
 
     function statusBadgeHtml(status) {
-      const map = { pending: ['badge-brand-green','⏳ Bekliyor'], processing: ['badge-blue','🔄 İşleniyor'], completed: ['badge-green','✅ Tamamlandı'], cancelled: ['badge-brand-purple','❌ İptal'] };
+      const map = {
+        preparing: ['badge-peach','🟡 Hazırlanıyor'],
+        shipped: ['badge-blue','🟢 Kargoya Verildi'],
+        delivered: ['badge-green','🟢 Teslim Edildi'],
+        returned: ['badge-brand-purple','🔴 İade'],
+        pending: ['badge-peach','⏳ Bekliyor'],
+        processing: ['badge-blue','🔄 İşleniyor'],
+        completed: ['badge-green','✅ Tamamlandı'],
+        cancelled: ['badge-brand-purple','❌ İptal']
+      };
       const [cls, label] = map[status] || ['badge-gray', status];
       return `<span class="badge ${cls}">${label}</span>`;
     }

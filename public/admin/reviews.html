@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yorumlar – Cango Toys Admin</title>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+  <!-- TOP NAVBAR -->
+  <nav class="top-navbar">
+    <div class="top-nav-left">
+      <a href="/admin/dashboard.html" class="top-logo">Cango<span>Toys</span></a>
+      <div class="admin-search" style="min-width:280px;">
+        <span>🔍</span>
+        <input type="text" placeholder="Yorum ara…" style="flex:1;"/>
+      </div>
+    </div>
+    <div class="top-nav-right">
+      <button class="nav-icon-btn" title="Bildirimler">🔔<span class="nav-badge">3</span></button>
+      <button class="nav-icon-btn" title="Mesajlar">💬</button>
+      <div style="display:flex;align-items:center;gap:0.6rem;cursor:pointer;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-purple);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:0.9rem;">CA</div>
+        <div style="line-height:1.2;">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--navy);">Cango Admin</div>
+          <div style="font-size:0.72rem;color:var(--gray-400);">Yönetici</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <nav class="sidebar-nav" style="padding-top:1.5rem;">
+      <div class="sidebar-label">Ana Menü</div>
+      <a href="/admin/dashboard.html" class="sidebar-link"><span class="sidebar-icon">📊</span> Dashboard</a>
+      <a href="/admin/products.html" class="sidebar-link"><span class="sidebar-icon">📦</span> Ürünler</a>
+      <a href="/admin/categories.html" class="sidebar-link"><span class="sidebar-icon">🧸</span> Kategoriler</a>
+      <a href="/admin/orders.html" class="sidebar-link"><span class="sidebar-icon">🛒</span> Siparişler</a>
+      <a href="/admin/customers.html" class="sidebar-link"><span class="sidebar-icon">👥</span> Müşteriler</a>
+      <div class="sidebar-label" style="margin-top:1.2rem">İçerik & Pazarlama</div>
+      <a href="/admin/reviews.html" class="sidebar-link active"><span class="sidebar-icon">⭐</span> Yorumlar</a>
+      <a href="/admin/campaigns.html" class="sidebar-link"><span class="sidebar-icon">🎁</span> Kampanyalar</a>
+      <div class="sidebar-label" style="margin-top:1.2rem">Analiz</div>
+      <a href="/admin/reports.html" class="sidebar-link"><span class="sidebar-icon">📊</span> Raporlar</a>
+      <a href="/admin/settings.html" class="sidebar-link"><span class="sidebar-icon">⚙️</span> Ayarlar</a>
+      <div class="sidebar-label" style="margin-top:1.2rem">Mağaza</div>
+      <a href="/" class="sidebar-link" target="_blank"><span class="sidebar-icon">🏪</span> Mağazaya Git</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--brand-purple);display:flex;align-items:center;justify-content:center;color:white;font-size:0.8rem;font-weight:800;">CA</div>
+        <div><div style="font-size:0.85rem;font-weight:700;color:white">Cango Admin</div><div style="font-size:0.72rem;color:var(--gray-400)">admin</div></div>
+        <button onclick="logout()" style="margin-left:auto;background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:1.1rem" title="Çıkış">🚪</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <div>
+        <div class="admin-page-title">⭐ Yorum Yönetimi</div>
+        <div style="font-size:0.82rem;color:var(--gray-400);margin-top:0.2rem;">Müşteri yorumlarını onaylayın, silin veya spam olarak işaretleyin</div>
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <span class="badge badge-peach" style="font-size:0.85rem;padding:0.4rem 0.8rem;">3 Bekleyen</span>
+      </div>
+    </header>
+    <div class="admin-content">
+
+      <!-- YORUM TABLOSU -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div class="admin-card-title">📋 Tüm Yorumlar</div>
+          <div style="display:flex;gap:0.5rem;">
+            <select class="form-control" style="width:auto;max-width:160px;font-size:0.82rem;padding:0.35rem 0.6rem;">
+              <option>Tümü</option>
+              <option>Bekleyen</option>
+              <option>Onaylı</option>
+              <option>Spam</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Müşteri</th>
+                <th>Ürün</th>
+                <th>Yorum</th>
+                <th>Puan</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ayşe Y.</strong></td>
+                <td>Uzay Mekiği Seti</td>
+                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Oğlum çok sevdi! Çok kaliteli ve eğitici bir ürün.</td>
+                <td>⭐⭐⭐⭐⭐</td>
+                <td><span class="badge badge-peach">⏳ Bekleyen</span></td>
+                <td style="color:var(--gray-400);font-size:0.82rem;">14 Mar 2026</td>
+                <td>
+                  <div style="display:flex;gap:0.3rem;">
+                    <button class="btn btn-green btn-sm" title="Onayla">✅</button>
+                    <button class="btn btn-ghost btn-sm" title="Spam">🚫</button>
+                    <button class="btn btn-ghost btn-sm" title="Sil" style="color:#EA580C;">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Mehmet K.</strong></td>
+                <td>Lego Klasik 500 Parça</td>
+                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kargo çok hızlıydı, ürün beklediğimden güzel.</td>
+                <td>⭐⭐⭐⭐</td>
+                <td><span class="badge badge-green">✅ Onaylı</span></td>
+                <td style="color:var(--gray-400);font-size:0.82rem;">13 Mar 2026</td>
+                <td>
+                  <div style="display:flex;gap:0.3rem;">
+                    <button class="btn btn-green btn-sm" title="Onayla" disabled>✅</button>
+                    <button class="btn btn-ghost btn-sm" title="Spam">🚫</button>
+                    <button class="btn btn-ghost btn-sm" title="Sil" style="color:#EA580C;">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Zeynep A.</strong></td>
+                <td>Unicorn Peluş 45cm</td>
+                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kızım bayıldı! Çok yumuşak ve renkleri harika.</td>
+                <td>⭐⭐⭐⭐⭐</td>
+                <td><span class="badge badge-peach">⏳ Bekleyen</span></td>
+                <td style="color:var(--gray-400);font-size:0.82rem;">12 Mar 2026</td>
+                <td>
+                  <div style="display:flex;gap:0.3rem;">
+                    <button class="btn btn-green btn-sm" title="Onayla">✅</button>
+                    <button class="btn btn-ghost btn-sm" title="Spam">🚫</button>
+                    <button class="btn btn-ghost btn-sm" title="Sil" style="color:#EA580C;">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Ali V.</strong></td>
+                <td>Matematik Tahtası</td>
+                <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">asdflk spam yorum test 123</td>
+                <td>⭐</td>
+                <td><span class="badge badge-brand-purple">🚫 Spam</span></td>
+                <td style="color:var(--gray-400);font-size:0.82rem;">11 Mar 2026</td>
+                <td>
+                  <div style="display:flex;gap:0.3rem;">
+                    <button class="btn btn-green btn-sm" title="Onayla">✅</button>
+                    <button class="btn btn-ghost btn-sm" title="Spam" disabled>🚫</button>
+                    <button class="btn btn-ghost btn-sm" title="Sil" style="color:#EA580C;">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/js/admin.js"></script>
+  <script>
+    if (!checkAuth()) window.location = '/admin/login.html';
+  </script>
+</body>
+</html>
