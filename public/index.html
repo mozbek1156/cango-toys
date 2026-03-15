@@ -63,10 +63,10 @@
 
       <div class="header-actions">
         <a href="/admin/login.html" class="header-action-btn">
-          <span class="header-action-icon">👤</span> <span>Giriş Yap</span>
+          <span class="header-action-icon">👤</span> <span class="header-action-text">Giriş Yap</span>
         </a>
-        <button class="header-action-btn" onclick="window.location='/cart.html'">
-          <span class="header-action-icon">🛒</span> <span>Sepetim</span>
+        <button class="header-action-btn" onclick="window.location='/cart.html'" style="position:relative;">
+          <span class="header-action-icon">🛒</span> <span class="header-action-text">Sepetim</span>
           <div class="cart-badge" id="cartCount" style="position:absolute;top:-8px;right:-8px">0</div>
         </button>
       </div>
@@ -102,17 +102,53 @@
         </div>
       </div>
       <div class="hero-visual" style="animation: none; flex-direction: column; align-items: flex-end; justify-content: center; gap: 0.8rem;">
-        <div class="hero-scroller-title" style="color: var(--brand-green-light); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
-          <span style="display:inline-block; width:8px; height:8px; background:var(--brand-green); border-radius:50%; box-shadow: 0 0 10px var(--brand-green);"></span> 
-          Trend Ürünler
+        <div class="hero-scroller-title" style="color: var(--brand-peach); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="display:inline-block; width:8px; height:8px; background:var(--brand-peach); border-radius:50%; box-shadow: 0 0 10px var(--brand-peach); animation: stockPulse 1.5s infinite;"></span> 
+          🎁 Haftanın Fırsatları
         </div>
-        <div class="hero-sidebar-scroller">
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">🚀</div><div class="hero-scroll-info"><span class="hero-scroll-title">Uzay Mekiği</span><span class="hero-scroll-desc">Yeni Sezon Seti</span></div></div>
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">🧸</div><div class="hero-scroll-info"><span class="hero-scroll-title">Uyku Arkadaşı Ayı</span><span class="hero-scroll-desc">Yumuşacık Peluş</span></div></div>
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">🎲</div><div class="hero-scroll-info"><span class="hero-scroll-title">Ahşap Zeka Küpü</span><span class="hero-scroll-desc">Eğitici Öğretici</span></div></div>
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">🎨</div><div class="hero-scroll-info"><span class="hero-scroll-title">Boyama Çantası</span><span class="hero-scroll-desc">120 Parça Set</span></div></div>
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">⚽</div><div class="hero-scroll-info"><span class="hero-scroll-title">Lisanslı Futbol Topu</span><span class="hero-scroll-desc">Açık Hava Sporu</span></div></div>
-          <div class="hero-scroll-item"><div class="hero-scroll-icon">🧩</div><div class="hero-scroll-info"><span class="hero-scroll-title">1000 Parça Puzzle</span><span class="hero-scroll-desc">Kutu Oyunu</span></div></div>
+        <div class="hero-sidebar-scroller" id="dealScroller">
+          <div class="hero-scroll-item" style="border-color:var(--brand-peach);">
+            <div class="hero-scroll-icon">🧩</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Zeka Küpü Seti</span>
+              <span class="hero-scroll-desc" style="color:var(--brand-peach);font-weight:800;">%30 İndirim</span>
+            </div>
+          </div>
+          <div class="hero-scroll-item" style="border-color:var(--brand-mint);">
+            <div class="hero-scroll-icon">🧸</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Peluş Unicorn</span>
+              <span class="hero-scroll-desc" style="color:#10B981;font-weight:800;">2 Al 1 Öde</span>
+            </div>
+          </div>
+          <div class="hero-scroll-item" style="border-color:var(--brand-purple);">
+            <div class="hero-scroll-icon">🚀</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Uzay Mekiği</span>
+              <span class="hero-scroll-desc" style="color:var(--brand-purple);font-weight:800;">%25 İndirim</span>
+            </div>
+          </div>
+          <div class="hero-scroll-item" style="border-color:var(--brand-peach);">
+            <div class="hero-scroll-icon">🎨</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Boyama Seti 120pc</span>
+              <span class="hero-scroll-desc" style="color:#EA580C;font-weight:800;">Ücretsiz Kargo</span>
+            </div>
+          </div>
+          <div class="hero-scroll-item" style="border-color:var(--brand-mint);">
+            <div class="hero-scroll-icon">⚽</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Futbol Topu Lisanslı</span>
+              <span class="hero-scroll-desc" style="color:#10B981;font-weight:800;">%20 İndirim</span>
+            </div>
+          </div>
+          <div class="hero-scroll-item" style="border-color:var(--brand-purple);">
+            <div class="hero-scroll-icon">🎲</div>
+            <div class="hero-scroll-info">
+              <span class="hero-scroll-title">Monopoly Deluxe</span>
+              <span class="hero-scroll-desc" style="color:var(--brand-purple);font-weight:800;">Son 5 Ürün!</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -208,18 +244,18 @@
     </div>
   </section>
 
-  <!-- KAMPANYA ALANI -->
+  <!-- HAFTANIN SÜRPRIZLERI -->
   <section class="section campaign-section">
     <div class="container">
-      <div class="campaign-banner">
+      <div class="campaign-banner" style="background: linear-gradient(135deg, #0F766E 0%, #14B8A6 50%, var(--brand-mint) 100%);">
         <div class="campaign-content">
-          <div class="campaign-badge">🎁 Haftanın Fırsatı</div>
-          <h2 style="color:white;font-size:2.5rem;margin-bottom:1rem;">Oyuncak Fırsatı!</h2>
-          <div class="campaign-discount">%30 İndirim</div>
-          <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;margin-bottom:2rem;max-width:400px;">Seçili eğitici oyuncak ve zeka oyunlarında geçerli. Sınırlı süre!</p>
-          <a href="/products.html?sale=true" class="btn btn-lg" style="background:white;color:var(--brand-purple);border-radius:50px;font-weight:900;">Fırsatları Gör →</a>
+          <div class="campaign-badge">✨ Haftanın Sürprizleri</div>
+          <h2 style="color:white;font-size:2.5rem;margin-bottom:1rem;">Sürpriz Ürünler!</h2>
+          <div class="campaign-discount" style="color:#FDE68A;">Her Hafta Yeni</div>
+          <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;margin-bottom:2rem;max-width:400px;">Her hafta farklı ürünlerde sürpriz indirimler seni bekliyor. Takipte kal!</p>
+          <a href="/products.html" class="btn btn-lg" style="background:white;color:#0F766E;border-radius:50px;font-weight:900;">Sürprizleri Keşfet →</a>
         </div>
-        <div class="campaign-visual">🧩🧸🚀</div>
+        <div class="campaign-visual">🎁🎉✨</div>
       </div>
     </div>
   </section>
@@ -453,6 +489,20 @@
       if (!sorted.length) { grid.innerHTML = '<p class="text-gray">Henüz ürün yok.</p>'; return; }
       grid.innerHTML = sorted.map(renderProductCard).join('');
     }
+
+    // Otomatik kaydırma - Haftanın Fırsatları
+    (function autoScrollDeals() {
+      const scroller = document.getElementById('dealScroller');
+      if (!scroller) return;
+      let scrollDir = 1;
+      setInterval(() => {
+        const itemH = 90; // yaklaşık bir item yüksekliği
+        scroller.scrollBy({ top: itemH * scrollDir, behavior: 'smooth' });
+        // Eğer en alta veya en üste ulaştıysa yönü değiştir
+        if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 5) scrollDir = -1;
+        if (scroller.scrollTop <= 5) scrollDir = 1;
+      }, 3000);
+    })();
   </script>
 </body>
 </html>
