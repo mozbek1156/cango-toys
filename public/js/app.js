@@ -66,13 +66,19 @@ function renderProductCard(p) {
   const catName = p.categoryInfo ? p.categoryInfo.name : '';
   const wholesale = p.price_wholesale ? `<div class="price-wholesale-label">Toptan:</div><div class="price-wholesale">₺${p.price_wholesale.toFixed(2)}</div>` : '';
   const ageTag = p.ageGroup ? `<span style="position:absolute; top:12px; left:12px; background:var(--brand-peach); color:white; font-size:0.75rem; font-weight:800; padding:0.25rem 0.6rem; border-radius:50px; z-index:2;">👶 ${p.ageGroup} Yaş</span>` : '';
+  const stockWarning = (p.stock > 0 && p.stock < 5) ? `<div style="color:#EA580C;font-size:0.78rem;font-weight:800;margin-top:0.3rem;">🔥 Son ${p.stock} ürün!</div>` : '';
   
   return `
-    <div class="product-card" onclick="window.location='/product.html?id=${p.id}'" style="cursor:pointer">
+    <div class="product-card" style="cursor:pointer; position:relative;">
       <div class="product-card-img">
         ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"/>` : emoji}
         ${p.featured ? '<span class="product-badge-featured" style="z-index:2;">⭐ Öne Çıkan</span>' : ''}
         ${ageTag}
+      </div>
+      <!-- HOVER OVERLAY -->
+      <div class="product-card-overlay">
+        <button class="overlay-btn" onclick="event.stopPropagation();quickAdd(${JSON.stringify(p).replace(/"/g,'&quot;')}, this)" ${p.stock===0?'disabled':''}>🛒 Sepete Ekle</button>
+        <button class="overlay-btn overlay-btn-quick" onclick="window.location='/product.html?id=${p.id}'">👁️ Hızlı İncele</button>
       </div>
       <div class="product-card-body">
         <span class="product-cat-tag">${catName}</span>
@@ -87,6 +93,7 @@ function renderProductCard(p) {
             Sepete Ekle
           </button>
         </div>
+        ${stockWarning}
       </div>
     </div>`;
 }

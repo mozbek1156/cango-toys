@@ -34,6 +34,11 @@
     </div>
   </aside>
 
+  <!-- ÜCRETSIZ KARGO BARI -->
+  <div class="free-shipping-bar">
+    🚚 <strong>500 TL üzeri ücretsiz kargo!</strong> — Türk Lirası ile güvenli ödeme
+  </div>
+
   <!-- ADVANCED DESKTOP HEADER -->
   <header class="top-header">
     <div class="header-inner">
@@ -84,11 +89,11 @@
     <div class="hero-content">
       <div>
         <div class="hero-badge">🎉 Türkiye'nin Oyuncak Merkezi</div>
-        <h1>Çocukların <span class="accent">Hayal</span> <span class="coral">Dünyası!</span></h1>
-        <p class="hero-desc">Oyuncaktan kırtasiyeye, güvenli ve eğitici binlerce ürün — en renkli fırsatlarla kapınıza geliyor.</p>
+        <h1>Hayal Gücünü <span class="accent">Büyüten</span> <span class="coral">Oyuncaklar!</span></h1>
+        <p class="hero-desc">Eğitici ve eğlenceli oyuncaklar binlerce seçenekle burada. Güvenli alışveriş, hızlı kargo.</p>
         <div class="hero-actions">
           <a href="/products.html" class="btn btn-secondary btn-lg">Oyuncakları Keşfet 🚀</a>
-          <a href="/products.html?type=wholesale" class="btn btn-outline-white btn-lg">Toptan Satış 📦</a>
+          <a href="#bestsellers" class="btn btn-outline-white btn-lg">En Çok Satanlar ⭐</a>
         </div>
         <div class="hero-stats">
           <div class="hero-stat"><div class="hero-stat-num" id="statProducts">16+</div><div class="hero-stat-label">Ürün</div></div>
@@ -199,6 +204,39 @@
       </div>
       <div class="text-center mt-4">
         <a href="/products.html" class="btn btn-outline">Tüm Ürünleri Gör →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KAMPANYA ALANI -->
+  <section class="section campaign-section">
+    <div class="container">
+      <div class="campaign-banner">
+        <div class="campaign-content">
+          <div class="campaign-badge">🎁 Haftanın Fırsatı</div>
+          <h2 style="color:white;font-size:2.5rem;margin-bottom:1rem;">Oyuncak Fırsatı!</h2>
+          <div class="campaign-discount">%30 İndirim</div>
+          <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;margin-bottom:2rem;max-width:400px;">Seçili eğitici oyuncak ve zeka oyunlarında geçerli. Sınırlı süre!</p>
+          <a href="/products.html?sale=true" class="btn btn-lg" style="background:white;color:var(--brand-purple);border-radius:50px;font-weight:900;">Fırsatları Gör →</a>
+        </div>
+        <div class="campaign-visual">🧩🧸🚀</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EN ÇOK SATANLAR -->
+  <section class="section bg-light" id="bestsellers">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🏆 En Çok Satanlar</div>
+        <h2 class="section-title">Popüler Oyuncaklar</h2>
+        <p class="section-desc">Ebeveynlerin en çok tercih ettiği, çocukların en çok sevdiği ürünler</p>
+      </div>
+      <div class="product-grid" id="bestsellerGrid">
+        <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
       </div>
     </div>
   </section>
@@ -323,6 +361,12 @@
           <div class="footer-contact-item">📞 +90 212 000 00 00</div>
           <div class="footer-contact-item">✉️ info@cangotoys.com</div>
           <div class="footer-contact-item">📍 İstanbul, Türkiye</div>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-btn" title="Instagram">📷</a>
+            <a href="#" class="footer-social-btn" title="Facebook">👍</a>
+            <a href="#" class="footer-social-btn" title="Twitter">🐦</a>
+            <a href="#" class="footer-social-btn" title="YouTube">🎥</a>
+          </div>
         </div>
         <div>
           <div class="footer-heading">Kategoriler</div>
@@ -341,8 +385,10 @@
         </div>
         <div>
           <div class="footer-heading">Bilgi</div>
+          <a href="#" class="footer-link">Kargo Bilgileri</a>
           <a href="#" class="footer-link">Sipariş Takibi</a>
           <a href="#" class="footer-link">İade Politikası</a>
+          <a href="#" class="footer-link">Sık Sorulan Sorular (SSS)</a>
           <a href="#" class="footer-link">Gizlilik</a>
           <a href="/admin/login.html" class="footer-link">Admin Girişi</a>
         </div>
@@ -396,7 +442,17 @@
 
     loadCategories();
     loadFeatured();
+    loadBestsellers();
     updateCartBadge();
+
+    async function loadBestsellers() {
+      const res = await fetch('/api/products');
+      const products = await res.json();
+      const grid = document.getElementById('bestsellerGrid');
+      const sorted = products.sort((a,b) => (b.stock||0) - (a.stock||0)).slice(0,4);
+      if (!sorted.length) { grid.innerHTML = '<p class="text-gray">Henüz ürün yok.</p>'; return; }
+      grid.innerHTML = sorted.map(renderProductCard).join('');
+    }
   </script>
 </body>
 </html>
